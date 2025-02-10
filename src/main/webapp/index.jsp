@@ -1,0 +1,89 @@
+<%-- 
+    Document   : index
+    Created on : Jan 28, 2025, 5:46:32 PM
+    Author     : iband
+--%>
+
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <title>Home Page</title>
+    <link rel="stylesheet" href="style.css">
+    </head>
+    <body>
+       
+         <!-- Main container with background -->
+    <div class="main-container">
+        
+         <!-- Scrolling text element -->
+        <div class="scrolling-text">
+            <p>Enjoy the ride with Mega City Cab Service! Book your cab now!</p>
+        </div>
+         <br><br>
+        <!-- Overlay for better text visibility on the background -->
+        <div class="overlay">
+            <h1>Welcome to Mega City Cab Service</h1>
+            <p>Fast, Reliable, and Affordable Cabs at Your Service</p>
+            
+            <!-- Admin login at the top right -->
+        <div class="admin-login">
+            <img src="admin.jpg" alt="Admin" class="admin-pic">
+            <form action="loginAdmin.jsp">
+                <input type="submit" value="Admin Login" class="btn btn-secondary"/>
+            </form>
+        </div>
+
+           <!-- Customer login and sign-up forms at the bottom -->
+        <div class="customer-forms">
+            <form action="customerMenu.jsp">
+                <input type="submit" value="Sign Up for Customers" class="btn btn-signup"/>
+            </form>
+
+            <form action="loginCustomer.jsp">
+                <input type="submit" value="Customer Login" class="btn btn-primary"/>
+            </form>
+        </div>
+    </div>
+        </div>
+    </div>
+    
+    <script>
+        // Function to determine the second and change the background image
+        function setBackgroundImage() {
+            var now = new Date();
+            var seconds = now.getSeconds();
+            var mainContainer = document.querySelector('.main-container');
+
+            // Change background based on the second value
+            if (seconds >= 0 && seconds < 15) {
+                // Background for seconds 0-14
+                mainContainer.style.backgroundImage = "url('m1.jpg')";
+            } else if (seconds >= 15 && seconds < 30) {
+                // Background for seconds 15-29
+                mainContainer.style.backgroundImage = "url('cab2.jpg')";
+             } else if (seconds >= 15 && seconds < 35) {
+                // Background for seconds 15-29
+                mainContainer.style.backgroundImage = "url('m2.jpg')";
+            } else if (seconds >= 30 && seconds < 45) {
+                // Background for seconds 30-44
+                mainContainer.style.backgroundImage = "url('m4.jpg')";
+            } else {
+                // Background for seconds 45-59
+                mainContainer.style.backgroundImage = "url('m5.png')";
+            }
+            
+        }
+
+        // Call the function to set the background image when the page loads
+        window.onload = setBackgroundImage;
+
+        // Change background every second to reflect real-time changes
+        setInterval(setBackgroundImage, 1000);
+    </script>
+    
+
+    
+    </body>
+</html>

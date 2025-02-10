@@ -1,0 +1,260 @@
+/* General body styling */
+
+        .admin-login {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            text-align: center;
+        }
+
+        .admin-pic {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            margin-bottom: 10px;
+        }
+
+        .customer-forms {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            text-align: center;
+        }
+
+        .customer-forms form {
+            margin-bottom: 10px;
+        }
+
+        .btn {
+            padding: 12px 40px;
+            font-size: 16px;
+            cursor: pointer;
+            border: none;
+            border-radius: 50px;
+            text-align: center;
+          
+        }
+
+        .btn-signup {
+            background-color: blue;
+            color: white;
+        }
+
+        .btn-primary {
+            background-color: blue;
+            color: white;
+        }
+
+        .btn-secondary {
+            background-color:yellow;
+            color: white;
+        }
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    color: #fff;
+}
+
+/* Main container styling */
+.main-container {
+    position: relative;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.6);  /* Semi-transparent dark overlay */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    transition: background-image 1s ease-in-out;
+  
+}
+
+/* Overlay to ensure text is readable on top of the background */
+.overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5); /* Transparent overlay */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Header Styling */
+h1 {
+    font-size: 4em;
+    margin-bottom: 70px;
+}
+
+p {
+    font-size: 1.5em;
+    margin-bottom: 170px;
+}
+
+/* Buttons styling */
+button, .btn {
+    padding: 12px 25px;
+    margin: 10px;
+    border: none;
+    border-radius: 25px;
+    cursor: pointer;
+    font-size: 1.2em;
+    transition: background-color 0.3s ease;
+}
+
+
+    
+
+
+/* Background Image */
+.background-image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0.5; /* Slightly faded background */
+}
+
+/* Login Container */
+.login-container {
+    padding: 20px;
+    background-color: rgba(0, 0, 0, 0.7);
+    width: 300px;
+    margin: 0 auto;
+    border-radius: 8px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+}
+
+/* Form styling */
+input[type="text"], input[type="password"] {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border-radius: 5px;
+    border: none;
+}
+
+input[type="submit"] {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border: none;
+    background-color: #4CAF50;
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+input[type="submit"]:hover {
+    opacity: 0.8;
+    color:yellow
+}
+
+
+ /* Text motion effect */
+        .scrolling-text {
+            position: absolute;
+            top: 50%;
+            left: 100%;
+            font-size: 24px;
+            color: yellow;
+            font-weight: bold;
+            white-space: nowrap;
+            animation: scrollText 20s linear infinite;
+        }
+
+        /* Animation to move text from right to left */
+        @keyframes scrollText {
+            0% {
+                left: 100%;
+            }
+            100% {
+                left: -100%;
+            }
+        }
+
+/* Responsive design */
+@media only screen and (max-width: 768px) {
+    h1 {
+        font-size: 2em;
+    }
+    
+    p {
+        font-size: 1.2em;
+    }
+    
+    .btn {
+        width: 80%;
+    }
+}
+
+
+
+
+ /* Button Styling */
+.btn {
+    width: 100%; /* Full width to elongate the button */
+    padding: 15px; /* Increase padding to make the buttons taller */
+    font-size: 1.2rem; /* Larger text for readability */
+    text-align: center;
+    cursor: pointer;
+    border-radius: 35px; /* Rounded corners */
+    border: none;
+    transition: background-color 0.3s ease;
+    font-weight: bold;
+}
+
+.btn-primary {
+    background-color: #0056b3; /* Primary button background */
+    color: white;
+}
+
+.btn-primary:hover {
+    background-color: blue; /* Darker shade on hover */
+}
+
+.btn-signup {
+    background-color: #28a745; /* Green button for signup */
+    color: white;
+}
+
+.btn-signup:hover {
+    background-color: red; /* Darker green on hover */
+}
+
+/* Ensuring the forms align properly and look good */
+.customer-forms {
+    display: flex;
+    flex-direction: column;
+    gap: 20px; /* Space between buttons */
+    width: 300px; /* Control width of the form container */
+    margin: 0 auto; /* Center the form container */
+    padding-top: 20px;
+}
+
+form {
+    width: 100%; /* Ensure forms take up the full width of the container */
+}
+
+form input[type="submit"] {
+    width: 100%; /* Ensure buttons stretch across the entire width of the form */
+    padding: 15px; /* Increased padding for more elongated buttons */
+    font-size: 1.2rem; /* Larger text */
+    text-align: center; /* Centered text */
+    border-radius: 5px; /* Rounded corners */
+    cursor: pointer; /* Pointer on hover */
+    border: none;
+    transition: background-color 0.3s ease; /* Smooth background color change */
+}
+
+form input[type="submit"]:hover {
+    opacity: 0.9; /* Slight opacity change on hover */
+}
+   
+
