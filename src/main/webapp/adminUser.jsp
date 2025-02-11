@@ -47,6 +47,10 @@
     <button class="btn btn-success mb-3" data-bs-toggle="modal" data-bs-target="#addUserModal">
         <i class="fas fa-user-plus"></i> Add New User
     </button>
+    
+    
+   
+
 
     <!-- User Table -->
     <table class="table table-bordered table-striped table-responsive">
@@ -63,6 +67,47 @@
         </tbody>
     </table>
 </div>
+       
+   <script>
+        // Function to fetch users from the RESTful service
+        function fetchUsers() {
+            fetch('http://localhost:8080/Cab_services/resources/adminUser')  // Replace with your actual REST endpoint
+                .then(response => response.json())  // Parse the JSON response
+                .then(data => {
+                    displayUsers(data);  // Call the function to display users
+                })
+                .catch(error => console.error('Error fetching users:', error));
+        }
+
+        // Function to display the list of users in the table
+        function displayUsers(users) {
+            const usersTable = document.getElementById('usersTable');
+            usersTable.innerHTML = '';  // Clear previous content
+
+            // Loop through each user and display them in the table
+            users.forEach(user => {
+                const row = document.createElement('tr');
+                const cell1 = document.createElement('td');
+                const cell2 = document.createElement('td');
+                const cell3 = document.createElement('td');
+
+                cell1.textContent = user.id;
+                cell2.textContent = user.username;
+                cell3.textContent = user.password;  // Be cautious about showing passwords
+
+                row.appendChild(cell1);
+                row.appendChild(cell2);
+                row.appendChild(cell3);
+
+                usersTable.appendChild(row);
+            });
+        }
+
+        // Call the fetchUsers function when the page loads
+        window.onload = fetchUsers;
+    </script>    
+       
+       
 
 <!-- Add User Modal -->
 <div class="modal fade" id="addUserModal" tabindex="-1" aria-labelledby="addUserModalLabel" aria-hidden="true">
@@ -89,7 +134,8 @@
     </div>
 </div>
 
-<!-- Include jQuery (optional) and AJAX for handling the form submission -->
+
+ <!-- Include jQuery (optional) and AJAX for handling the form submission -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 <script>
@@ -109,7 +155,7 @@
 
         // AJAX request to the RESTful service
         $.ajax({
-            url: 'http://localhost:8080/Cab/resources/admin/addUser',  // Replace with your actual endpoint URL
+            url: 'http://localhost:8080/Cab_services/resources/adminUser',  // Replace with your actual endpoint URL
             type: 'POST',
             contentType: 'application/json',
             data: JSON.stringify(userData),

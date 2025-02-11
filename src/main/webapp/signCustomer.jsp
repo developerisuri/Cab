@@ -244,7 +244,7 @@
 
                 // Send the AJAX request to the backend to create a new user
                 $.ajax({
-                    url: 'http://localhost:8080/Cab_services/resources/api/user',
+                    url: 'http://localhost:8080/Cab_services/resources/user',
                     // Ensure this is correct
                     type: 'POST',
                     contentType: 'application/json',

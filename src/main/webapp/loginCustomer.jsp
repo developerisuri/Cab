@@ -248,7 +248,7 @@
                 };
 
                 // Send the AJAX request to the RESTful login endpoint
-                fetch('http://localhost:8080/Cab_services/resources/api/user/login', {
+                fetch('http://localhost:8080/Cab_services/resources/user/login', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
