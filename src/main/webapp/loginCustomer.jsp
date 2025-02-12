@@ -259,7 +259,7 @@
                     if (response.ok) {
                         // If login is successful
                         alert('Login successful!');
-                        window.location.href = 'customerRegister.jsp'; // Redirect to the customer dashboard
+                        window.location.href = 'customerMenu.jsp'; // Redirect to the customer dashboard
                     } else {
                         // If login failed
                         return response.text(); // Extract the error message

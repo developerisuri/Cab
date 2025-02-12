@@ -10,6 +10,10 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Vehicle Info</title>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+        
+        
+        
         
          <nav>
     <div class="logo-container">
@@ -31,6 +35,51 @@
 
     </div>
 </nav>
+    
+    
+    
+    <script>
+        // This function will fetch the vehicle data from the server and populate the table
+        window.onload = function() {
+            fetch('http://localhost:8080/Cab_services/resources/vehicles')  // Make sure the path is correct for your GlassFish deployment
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(vehicles => {
+                    let table Body = document.getElementById('vehicleTableBody');
+                    if (vehicles.length > 0) {
+                        vehicles.forEach(vehicle => {
+                            let row = document.createElement('tr');
+                            
+                            // Populate the row with vehicle data
+                            row.innerHTML = `
+                                <td>${vehicle.vehicle_id}</td>
+                                <td>${vehicle.plate}</td>
+                                <td>${vehicle.type}</td>
+                                <td>${vehicle.model}</td>
+                                <td>${vehicle.colour}</td>
+                                <td>${vehicle.basefare}</td>
+                                <td>${vehicle.status}</td>
+                            `;
+                            
+                            table Body.appendChild(row);  // Append row to table body
+                        });
+                    } else {
+                        // If no vehicles are found
+                        table Body.innerHTML = "<tr><td colspan='7' class='error-message'>No vehicles available</td></tr>";
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching vehicle data:', error);
+                    let table Body = document.getElementById('vehicleTableBody');
+                    table Body.innerHTML = "<tr><td colspan='7' class='error-message'>Failed to load vehicle data</td></tr>";
+                });
+        }
+    </script>
+    
     </head>
     <body>
        
@@ -46,34 +95,25 @@
     <div class="logout-btn">
         <a href="logout.jsp" class="btn btn-logout">Logout</a>
     </div>
-    
+ 
+</head>
+<body>
     <div class="container">
         <h1 class="page-title">Vehicle Information</h1>
         <table class="vehicle-table">
             <thead>
                 <tr>
                     <th>Vehicle ID</th>
+                    <th>Plate No</th>
                     <th>Type</th>
-                    <th>Plate No.</th>
                     <th>Model</th>
                     <th>Color</th>
                     <th>Base Fare</th>
                     <th>Status</th>
                 </tr>
             </thead>
-            <tbody>
-                <!-- Loop through the list of vehicles sent from the server -->
-                <c:forEach var="vehicle" items="${vehicles}">
-                    <tr>
-                        <td>${vehicle.id}</td>
-                        <td>${vehicle.type}</td>
-                        <td>${vehicle.plateNo}</td>
-                        <td>${vehicle.model}</td>
-                        <td>${vehicle.color}</td>
-                        <td>${vehicle.baseFare}</td>
-                        <td>${vehicle.status}</td>
-                    </tr>
-                </c:forEach>
+            <tbody id="vehicleTableBody">
+            <td></td> <!-- Dynamic rows will be added here -->
             </tbody>
         </table>
     </div>
@@ -438,8 +478,13 @@ footer .social-icons a {
         const nav = document.querySelector('nav');
         nav.classList.toggle('active');
     }
+    </script>
     
     
-    </style>
     
+    
+    
+       
+   
+      
 </html>

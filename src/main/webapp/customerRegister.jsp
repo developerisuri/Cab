@@ -10,6 +10,7 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Customer Register</title>
+         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     </head>
     <body>
         <div class="container">
@@ -229,16 +230,93 @@ button.processing::after {
     <script>
   const button = document.querySelector('button');
 
-  button.addEventListener('click', function () {
+  //button.addEventListener('click', function () {
     // Add the 'processing' class when the button is clicked
-    button.classList.add('processing');
+   // button.classList.add('processing');
 
     // Simulate an API call or some processing task with a delay (e.g., 3 seconds)
-    setTimeout(function () {
+    //setTimeout(function () {
       // Remove the 'processing' class after the task is done
-      button.classList.remove('processing');
-      alert('Processing complete!');
-    }, 3000); // Simulate a 3-second delay
-  });
+    //  button.classList.remove('processing');
+     // alert('Processing complete!');
+   // }, 3000); // Simulate a 3-second delay
+  //});
 </script>
+
+
+
+<script>
+        $(document).ready(function() {
+            // Check if customer exists on signId input change
+            $('#signId').change(function() {
+                var signId = $(this).val();
+
+                // Send GET request to check if the customer exists
+                $.ajax({
+                    url: 'http://localhost:808/Cab_services/customers/check', // Update with the correct URL
+                    type: 'GET',
+                    contentType: 'application/json',
+                    data: JSON.stringify({ signId: signId }),
+                    success: function(response) {
+                        // If the customer exists, show message and enable registration
+                        if (response.redirectUrl === '/customerMenu') {
+                            $('#message').html('<p style="color: green;">Customer exists. Redirecting to customer menu.</p>');
+                            $('#customer-name').prop('disabled', true);
+                            $('#address').prop('disabled', true);
+                            $('#nic').prop('disabled', true);
+                            $('#telephone').prop('disabled', true);
+                            $('.btn-submit').prop('disabled', true);
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        // If the customer doesn't exist, enable form fields for registration
+                        if (xhr.status === 404) {
+                            $('#message').html('<p style="color: red;">Customer does not exist. Proceed with registration.</p>');
+                            $('#customer-name').prop('disabled', false);
+                            $('#address').prop('disabled', false);
+                            $('#nic').prop('disabled', false);
+                            $('#telephone').prop('disabled', false);
+                            $('.btn-submit').prop('disabled', false);
+                        } else {
+                            $('#message').html('<p style="color: red;">An error occurred. Please try again.</p>');
+                        }
+                    }
+                });
+            });
+
+            // Handle form submission for registration
+            $('#customer-form').submit(function(event) {
+                event.preventDefault(); // Prevent the default form submission
+
+                // Get form data
+                var formData = {
+                    signId: $('#signId').val(),
+                    customerName: $('#customer-name').val(),
+                    address: $('#address').val(),
+                    nic: $('#nic').val(),
+                    telephone: $('#telephone').val()
+                };
+
+                // Send POST request to register customer
+                $.ajax({
+                    url: 'http://localhost:8080/Cab_services/customers/register', // Update with the correct URL
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify(formData),
+                    success: function(response) {
+                        // Display success message
+                        $('#message').html(`<p style="color: green;">${response.message}</p>`);
+                    },
+                    error: function(xhr, status, error) {
+                        // Display error message
+                        var errorMessage = 'An error occurred. Please try again.';
+                        if (xhr.responseJSON && xhr.responseJSON.message) {
+                            errorMessage = xhr.responseJSON.message;
+                        }
+                        $('#message').html(`<p style="color: red;">${errorMessage}</p>`);
+                    }
+                });
+            });
+        });
+    </script>
 </html>
