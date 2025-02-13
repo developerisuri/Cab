@@ -1,6 +1,6 @@
 <%-- 
-    Document   : driverInfo
-    Created on : Feb 1, 2025, 8:32:04 PM
+    Document   : help
+    Created on : Feb 13, 2025, 2:00:43 PM
     Author     : iband
 --%>
 
@@ -9,9 +9,9 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Driver Info</title>
+        <title>Help</title>
         
-           <nav>
+         <nav>
     <div class="logo-container">
     <div class="logo-text">Mega City Cab</div>
     <div class="logo">
@@ -30,10 +30,7 @@
 
 
     </div>
-</nav>
-    </head>
-    <body>
-            
+</nav>   
         <!-- Help Button on the Left with an Image -->
 <div class="help-btn">
     <a href="help.jsp" class="btn btn-help" alt="Help Icon">
@@ -45,35 +42,39 @@
     <div class="logout-btn">
         <a href="logout.jsp" class="btn btn-logout">Logout</a>
     </div>
-    
-    
+ 
+        
+    </head>
     <div class="container">
-        <h1>Driver Details</h1>
-        <table class="driver-table">
+    <h1 class="page-title">Help Instructions</h1>
+    <div class="table-container">
+        <table class="help-table">
             <thead>
                 <tr>
-                    <th>Driver ID</th>
-                    <th>Name</th>
-                    <th>Address</th>
-                    <th>Contact No.</th>
+                    <th>Help ID</th>
+                    <th>Instructions</th>
                 </tr>
             </thead>
-            <tbody id="driverTableBody">
-               
+            <tbody id="helpTableBody">
+                <!-- Help instructions will be dynamically inserted here -->
             </tbody>
         </table>
     </div>
+</div>
+
+        
+        
     </body>
     
-    
     <footer>
+        <div>
     <div class="footer-container">
         <!-- Copyright -->
         <div>
             <p>&copy; 2025 Mega City Cab</p>
         </div>
 
-        <!-- Footer Links -->
+        <!-- Footer Links --> 
         <div>
             <a href="privacyPolicy.html">Privacy Policy</a> |
             <a href="termsOfService.html">Terms of Service</a>
@@ -87,7 +88,7 @@
         </div>
         
          <div class="social-icons">
-             <a href="customerMenu.jsp" target="_blank" class="twitter">Menu</a>
+             <a href="customerMenu.jsp  " target="_blank" class="twitter">Menu</a>
             <a href="customerRegister.jsp" target="_blank" class="facebook">Register</a>
              <a href="booking.jsp" target="_blank" class="twitter">Booking</a>
               <a href="bookingDetails.jsp" target="_blank" class="twitter">Booking Details</a>
@@ -97,9 +98,9 @@
     </div>
 </footer>
     
+    
     <style>
-        
-         /* Global reset */
+   /* Global reset */
 * {
     margin: 0;
     padding: 0;
@@ -112,11 +113,11 @@ body {
     color: #333;
     
     /* Background image setup */
-    background: url('d2.png') no-repeat center center;
+    background: url('v2.png') no-repeat center center;
     background-size: cover;  /* Make sure the image covers the entire page */
     background-attachment: fixed; /* Makes sure the background stays fixed when scrolling (optional) */
     
-    height: 10vh; /* Ensure the body takes the full height of the viewport */
+    height: 20vh; /* Ensure the body takes the full height of the viewport */
     padding-top: 100px; /* Adjusted for better space for the menu */
     margin: 0; /* Remove default margin to ensure full coverage */
 }
@@ -348,9 +349,20 @@ footer .social-icons a {
 
 .btn-logout:hover {
     background-color: red;
+    
+    
+    .container {
+    width: 80%;
+    margin: auto;
+    text-align: center;
 }
 
+h1 {
+    color: #333;
+    margin-bottom: 20px;
+}
 
+/* Container styling */
 .container {
     width: 90%;
     max-width: 1200px;
@@ -359,155 +371,123 @@ footer .social-icons a {
     background-color: white;
     border-radius: 8px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
-
-.container {
-    max-width: 1200px;
-    margin: 50px auto;
-    padding: 20px;
-    background-color: #ffffff;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-h1 {
     text-align: center;
-    color: #333;
-    font-size: 32px;
-    margin-bottom: 30px;
 }
 
-/* Table styles */
-.driver-table {
-    width: 100%;
+/* Page title styling */
+.page-title {
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 26px;
+    color: darkblue;
+}
+
+/* Centering the table */
+.table-container {
+    display: flex;
+    justify-content: center;
+}
+
+/* Styling for the help table */
+.help-table {
+    width: 80%;
     border-collapse: collapse;
-    margin-bottom: 30px;
+    margin-top: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    overflow: hidden;
 }
 
-.driver-table th,
-.driver-table td {
-    padding: 12px 15px;
-    text-align: left;
+/* Header row styling */
+.help-table th {
+    background-color: #4a90e2;
+    color: white;
+    padding: 12px;
+    text-align: center;
     border: 1px solid #ddd;
 }
 
-.driver-table th {
-    background-color: #4CAF50;
-    color: white;
-    font-size: 16px;
+/* Table body styling */
+.help-table td {
+    padding: 12px;
+    text-align: center ;
+    border: 10px solid #ddd;
 }
 
-.driver-table td {
+/* Alternate row background for better readability */
+.help-table tbody tr:nth-child(even) {
     background-color: #f9f9f9;
-    color: #333;
-    font-size: 14px;
 }
 
-.driver-table tr:nth-child(even) td {
+/* Hover effect */
+.help-table tbody tr:hover {
     background-color: #f1f1f1;
 }
 
-.driver-table tr:hover td {
-    background-color: #e4e4e4;
-}
-
-.driver-table td, .driver-table th {
-    text-align: center;
-}
-
-/* Responsive styles */
+ }
+/* Responsive design */
 @media (max-width: 768px) {
-    .driver-table th, .driver-table td {
-        padding: 10px;
+    .help-table {
+        width: 100%;
     }
 
-    .container {
-        margin: 20px;
-    }
-
-    h1 {
-        font-size: 28px;
-    }
-
-    .driver-table {
-        font-size: 12px;
-    }
-}
-
-@media (max-width: 480px) {
-    .driver-table {
-        font-size: 10px;
-    }
-
-    h1 {
-        font-size: 24px;
-    }
-
-    .container {
-        padding: 15px;
-    }
-
-    .driver-table th, .driver-table td {
+    .help-table th, .help-table td {
+        font-size: 14px;
         padding: 8px;
     }
 }
-        
-    </style>
-    
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+</style>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> 
 
 <script>
     $(document).ready(function() {
-        function getAllDrivers() {
+        function getAllHelpInstructions() {
             $.ajax({
-                url: 'http://localhost:8080/Cab_services/resources/drivers',  // Ensure the URL is correct
+                url: 'http://localhost:8080/Cab_services/resources/help',  
                 type: 'GET',
                 dataType: 'json',
                 success: function(data) {
-                    console.log("Data received:", data);
+                    console.log("Data received:", data);  
 
-                    // Clear existing table body
-                    $('#driverTableBody').empty();
+                    // Clear the existing table body
+                    $('#helpTableBody').empty();
 
                     // Check if data is valid and not empty
                     if (Array.isArray(data) && data.length > 0) {
-                        $.each(data, function(index, driver) {
-                            console.log(driver);
+                        $.each(data, function(index, help) {
+                            console.log(help);  // Log the help object
 
                             // Ensure values exist to prevent "undefined" issues
-                            var driverId = driver.driverId ? driver.driverId : '-';
-                            var name = driver.name ? driver.name : '-';
-                            var address = driver.address ? driver.address : '-';
-                            var tele = driver.tele ? driver.tele : '-';
+                            var helpId = help.helpId ? help.helpId : '-';
+                            var instructions = help.instructions ? help.instructions : '-';
 
-                            // Construct the table row
+                            // Constructing the table row
                             var row = '<tr>' +
-                                '<td>' + driverId + '</td>' +
-                                '<td>' + name + '</td>' +
-                                '<td>' + address + '</td>' +
-                                '<td>' + tele + '</td>' +
-                                '</tr>';
+                                        '<td>' + helpId + '</td>' +
+                                        '<td class="long-text">' + instructions + '</td>' +
+                                      '</tr>';
 
                             // Append the row to the table
-                            $('#driverTableBody').append(row);
+                            $('#helpTableBody').append(row);
                         });
                     } else {
-                        // If no drivers are found, display a message in the table
-                        $('#driverTableBody').html('<tr><td colspan="4" style="text-align:center;">No drivers found</td></tr>');
+                        // If no help instructions are found, display a message in the table
+                        $('#helpTableBody').html('<tr><td colspan="2" style="text-align:center;">No help instructions found</td></tr>');
                     }
                 },
                 error: function(xhr, status, error) {
-                    console.error("Error fetching drivers:", xhr.responseText);
-                    alert('Error fetching driver data. Please try again.');
+                    console.error("Error fetching help instructions:", xhr.responseText);
+                    alert('Error fetching help data. Please try again.');
                 }
             });
         }
 
-        // Fetch driver data when the page loads
-        getAllDrivers();
+        // Fetch help instructions when the page loads
+        getAllHelpInstructions();
     });
 </script>
 
-    
-    
+
 </html>

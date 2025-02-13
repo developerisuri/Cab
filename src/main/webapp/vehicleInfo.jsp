@@ -10,11 +10,7 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Vehicle Info</title>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-        
-        
-        
-        
+          
          <nav>
     <div class="logo-container">
     <div class="logo-text">Mega City Cab</div>
@@ -34,56 +30,7 @@
 
 
     </div>
-</nav>
-    
-    
-    
-    <script>
-        // This function will fetch the vehicle data from the server and populate the table
-        window.onload = function() {
-            fetch('http://localhost:8080/Cab_services/resources/vehicles')  // Make sure the path is correct for your GlassFish deployment
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok');
-                    }
-                    return response.json();
-                })
-                .then(vehicles => {
-                    let table Body = document.getElementById('vehicleTableBody');
-                    if (vehicles.length > 0) {
-                        vehicles.forEach(vehicle => {
-                            let row = document.createElement('tr');
-                            
-                            // Populate the row with vehicle data
-                            row.innerHTML = `
-                                <td>${vehicle.vehicle_id}</td>
-                                <td>${vehicle.plate}</td>
-                                <td>${vehicle.type}</td>
-                                <td>${vehicle.model}</td>
-                                <td>${vehicle.colour}</td>
-                                <td>${vehicle.basefare}</td>
-                                <td>${vehicle.status}</td>
-                            `;
-                            
-                            table Body.appendChild(row);  // Append row to table body
-                        });
-                    } else {
-                        // If no vehicles are found
-                        table Body.innerHTML = "<tr><td colspan='7' class='error-message'>No vehicles available</td></tr>";
-                    }
-                })
-                .catch(error => {
-                    console.error('Error fetching vehicle data:', error);
-                    let table Body = document.getElementById('vehicleTableBody');
-                    table Body.innerHTML = "<tr><td colspan='7' class='error-message'>Failed to load vehicle data</td></tr>";
-                });
-        }
-    </script>
-    
-    </head>
-    <body>
-       
-        
+</nav>   
         <!-- Help Button on the Left with an Image -->
 <div class="help-btn">
     <a href="help.jsp" class="btn btn-help" alt="Help Icon">
@@ -97,39 +44,35 @@
     </div>
  
 </head>
-<body>
-    <div class="container">
-        <h1 class="page-title">Vehicle Information</h1>
-        <table class="vehicle-table">
-            <thead>
-                <tr>
-                    <th>Vehicle ID</th>
-                    <th>Plate No</th>
-                    <th>Type</th>
-                    <th>Model</th>
-                    <th>Color</th>
-                    <th>Base Fare</th>
-                    <th>Status</th>
-                </tr>
-            </thead>
-            <tbody id="vehicleTableBody">
-            <td></td> <!-- Dynamic rows will be added here -->
-            </tbody>
-        </table>
-    </div>
 
-    
-    </body>
-    
+<body>
+<table class="vehicle-table">
+    <thead>
+        <tr>
+            <th>Vehicle ID</th>
+            <th>Plate No</th>
+            <th>Type</th>
+            <th>Model</th>
+            <th>Color</th>
+            <th>Base Fare</th>
+            <th>Status</th>
+        </tr>
+    </thead>
+    <tbody id="vehicleTableBody">
+        <!-- Dynamic rows will be added here -->
+    </tbody>
+</table>
+</body>
     
     <footer>
+        <div>
     <div class="footer-container">
         <!-- Copyright -->
         <div>
             <p>&copy; 2025 Mega City Cab</p>
         </div>
 
-        <!-- Footer Links -->
+        <!-- Footer Links --> 
         <div>
             <a href="privacyPolicy.html">Privacy Policy</a> |
             <a href="termsOfService.html">Terms of Service</a>
@@ -143,7 +86,7 @@
         </div>
         
          <div class="social-icons">
-             <a href="customerMenu.jsp" target="_blank" class="twitter">Menu</a>
+             <a href="customerMenu.jsp  " target="_blank" class="twitter">Menu</a>
             <a href="customerRegister.jsp" target="_blank" class="facebook">Register</a>
              <a href="booking.jsp" target="_blank" class="twitter">Booking</a>
               <a href="bookingDetails.jsp" target="_blank" class="twitter">Booking Details</a>
@@ -427,7 +370,8 @@ footer .social-icons a {
 .vehicle-table {
     width: 100%;
     border-collapse: collapse;
-    margin: 0 auto;
+    margin: 20px auto;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 .vehicle-table th, .vehicle-table td {
@@ -437,8 +381,9 @@ footer .social-icons a {
 }
 
 .vehicle-table th {
-    background-color: #4a90e2;
+    background-color: #007BFF;
     color: white;
+    font-weight: bold;
 }
 
 .vehicle-table tbody tr:nth-child(even) {
@@ -449,11 +394,25 @@ footer .social-icons a {
     background-color: #f1f1f1;
 }
 
+.vehicle-table td {
+    text-align: center;
+    color: black;
+}
+
+.page-title {
+    text-align: center;
+    font-size: 24px;
+    margin-top: 20px;
+    color: darkblue;
+}
+
 @media (max-width: 768px) {
     .vehicle-table th, .vehicle-table td {
         font-size: 14px;
         padding: 8px;
     }
+}
+
 
     .container {
         width: 100%;
@@ -463,7 +422,7 @@ footer .social-icons a {
     .page-title {
         font-size: 20px;
     }
-}
+
 
 .h1{
     color: darkblue;
@@ -480,11 +439,66 @@ footer .social-icons a {
     }
     </script>
     
-    
-    
-    
-    
-       
-   
-      
+   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> 
+
+<script>
+    $(document).ready(function() {
+        function getALLVehicles() {
+            $.ajax({
+                url: 'http://localhost:8080/Cab_services/resources/vehicles',  
+                type: 'GET',
+                dataType: 'json',
+                success: function(data) {
+                    console.log("Data received:", data);  
+
+                    // Clear the existing table body
+                    $('#vehicleTableBody ').empty();
+
+                    // Check if data is valid and not empty
+                    if (Array.isArray(data) && data.length > 0) {
+                        $.each(data, function(index, vehicle) {
+                            console.log(vehicle);  // Log the vehicle object
+
+                            // Ensure values exist to prevent "undefined" issues
+                            var vehicleId = vehicle.vehicleId ? vehicle.vehicleId : '-';
+                            var plate = vehicle.plate ? vehicle.plate : '-';
+                            var type = vehicle.type ? vehicle.type : '-';
+                            var model = vehicle.model ? vehicle.model : '-';
+                            var colour = vehicle.colour ? vehicle.colour : '-';
+                           var baseFare = vehicle.baseFare ? vehicle.baseFare : '-';
+
+                            var status = vehicle.status ? vehicle.status : '-';
+
+                            // Constructing the table row
+                            var row = '<tr>' +
+            '<td>' + vehicleId + '</td>' +
+            '<td>' + plate + '</td>' +
+            '<td>' + type + '</td>' +
+            '<td>' + model + '</td>' +
+            '<td>' + colour + '</td>' +
+            '<td>' + baseFare + '</td>' +
+            '<td class="' + (status === 'Available' ? 'available' : 'unavailable') + '">' + status + '</td>' +
+          '</tr>';
+
+                            // Append the row to the table
+                            $('#vehicleTableBody').append(row);
+                        });
+                    } else {
+                        // If no vehicles are found, display a message in the table
+                        $('#vehicleTableBody').html('<tr><td colspan="7" style="text-align:center;">No vehicles found</td></tr>');
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error("Error fetching vehicles:", xhr.responseText);
+                    alert('Error fetching vehicle data. Please try again.');
+                }
+            });
+        }
+
+        // Fetch vehicle data when the page loads
+        getALLVehicles();
+    });
+</script>
+
+
 </html>
