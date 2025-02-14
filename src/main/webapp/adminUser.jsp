@@ -264,8 +264,9 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="editUserModalLabel">Edit User</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id=" editUserBtn"></button>
             </div>
+            
             <div class="modal-body">
                 <form id="editUserForm">
                     <div class="mb-3">
@@ -283,6 +284,103 @@
         </div>
     </div>
 </div>
+<script>
+
+$(document).ready(function () {
+    // Function to load users from API and display them in the table
+    function loadUsers() {
+        $.ajax({
+            url: 'http://localhost:8080/Cab_services/resources/adminUser',
+            type: 'GET',
+            dataType: 'json',
+            success: function (users) {
+                $('#userTableBody').empty();
+                users.forEach(user => {
+                    var userId = user.id ? user.id : '-';
+                    var username = user.username ? user.username : '-';
+                    var password = user.password ? user.password : '-';
+
+                    var row = '<tr>' +
+                        '<td>' + userId + '</td>' +
+                        '<td>' + username + '</td>' +
+                        '<td>' + password + '</td>' +
+                        '<td>' +
+                            '<button class="btn btn-info editUserBtn" data-bs-toggle="modal" data-bs-target="#editUserModal" data-id="' + userId + '" data-username="' + username + '" data-password="' + password + '">' +
+                            '<i class="fas fa-edit"></i> Edit</button> ' +
+                            '<button class="btn btn-danger deleteUserBtn" data-id="' + userId + '">' +
+                            '<i class="fas fa-trash-alt"></i> Delete</button>' +
+                        '</td>' +
+                        '</tr>';
+
+                    $('#userTableBody').append(row);
+                });
+            },
+            error: function () {
+                alert("Error loading users.");
+            }
+        });
+    }
+
+    // Function to open the edit modal and fill it with user data
+    $(document).on("click", ".editUserBtn", function () {
+        let userId = $(this).data("id");
+        let username = $(this).data("username");
+        let password = $(this).data("password");
+
+        $("#editUserId").val(userId);
+        $("#editUserUsername").val(username);
+        $("#editUserPassword").val(password);
+    });
+
+    // Function to handle user update
+   // Function to handle user update
+function updateUser() {
+    let userId = $("#editUserId").val();
+    let username = $("#editUserUsername").val();
+    let password = $("#editUserPassword").val();
+
+    if (!userId || !username || !password) {
+        alert("Please fill in all fields.");
+        return;
+    }
+
+    let userData = {
+        id: userId,
+        username: username,
+        password: password
+    };
+
+    $.ajax({
+        url: 'http://localhost:8080/Cab_services/resources/adminUser', // Ensure this URL is correct
+        type: 'PUT',
+        contentType: 'application/json',
+        data: JSON.stringify(userData),
+        success: function (response) {
+            alert("User updated successfully!");
+            $("#editUserModal").modal("hide");
+            loadUsers(); // Refresh the table
+        },
+        error: function (xhr, status, error) {
+            console.error("Update failed:", xhr.responseText);
+            alert("Error updating user: " + xhr.responseText);
+        }
+    });
+}
+
+// Handle form submission for updating the user
+$("#editUserForm").submit(function (e) {
+    e.preventDefault();
+    updateUser();
+});
+
+    // Load users when the page is ready
+    loadUsers();
+});
+
+</script>
+
+
+
 
 <!-- Delete User Confirmation Modal -->
 <div class="modal fade" id="deleteUserModal" tabindex="-1" aria-labelledby="deleteUserModalLabel" aria-hidden="true">
