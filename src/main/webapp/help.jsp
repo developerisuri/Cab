@@ -364,47 +364,41 @@ h1 {
 
 /* Container styling */
 .container {
-    width: 90%;
-    max-width: 1200px;
-    margin: 20px auto;
-    padding: 20px;
-    background-color: white;
-    border-radius: 8px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    text-align: center;
-}
-
-/* Page title styling */
-.page-title {
-    text-align: center;
-    margin-bottom: 20px;
-    font-size: 26px;
-    color: darkblue;
-}
-
-/* Centering the table */
-.table-container {
     display: flex;
+    flex-direction: column;
+    align-items: center;
     justify-content: center;
+    min-height: 100vh;
+    text-align: center;
 }
 
-/* Styling for the help table */
-.help-table {
+.page-title {
+    font-size: 28px;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+.table-container {
     width: 80%;
-    border-collapse: collapse;
-    margin-top: 20px;
-    background-color: #fff;
-    border-radius: 8px;
-    overflow: hidden;
+    max-width: 800px;
+    margin: 0 auto;
 }
 
-/* Header row styling */
-.help-table th {
-    background-color: #4a90e2;
-    color: white;
+.help-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.help-table th, .help-table td {
+    border: 2px solid #000;
     padding: 12px;
     text-align: center;
-    border: 1px solid #ddd;
+}
+
+.help-table th {
+    background-color: #f4f4f4;
 }
 
 /* Table body styling */
@@ -412,7 +406,9 @@ h1 {
     padding: 12px;
     text-align: center ;
     border: 10px solid #ddd;
+   
 }
+
 
 /* Alternate row background for better readability */
 .help-table tbody tr:nth-child(even) {

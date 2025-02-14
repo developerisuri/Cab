@@ -12,9 +12,9 @@
         <title>User Manage</title>
         <!-- Bootstrap CSS for responsive design -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css"> <!-- Custom CSS for Styling -->
-    <!-- FontAwesome for icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  
+   
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     </head>
     
     <body>
@@ -42,6 +42,80 @@
         <input class="form-control me-2" type="search" placeholder="Search for users..." aria-label="Search" id="searchInput">
         <button class="btn btn-primary" type="submit" id="searchBtn">Search</button>
     </form>
+    
+   <script>
+    $(document).ready(function() {
+        // Service function to fetch user by ID from the backend
+        function getUseri(id, callback) {
+            $.ajax({
+                url: 'http://localhost:8080/Cab_services/resources/adminUser' ,  // API endpoint with user ID
+                type: 'GET',  // HTTP method (GET request)
+                dataType: 'json',  // Expected response data type
+                success: function(user) {
+                    console.log("User data received:", user);  // Log the user data
+                    callback(null, user); // Pass the user data to the callback function
+                },
+                error: function(xhr, status, error) {
+                    console.error("Error fetching user:", xhr.responseText);
+                    if (xhr.status === 404) {
+                        callback('User not found.', null);  // Handle 404 error if user is not found
+                    } else if (xhr.status === 500) {
+                        callback('Server error. Please try again later.', null);  // Handle 500 server error
+                    } else {
+                        callback('Error fetching user data. Please try again.', null);  // Generic error
+                    }
+                }
+            });
+        }
+
+        // Handle search button click
+     $('#searchBtn').click(function(e) {
+    e.preventDefault();
+
+    let id = $('#searchInput').val().trim();  
+
+    if (id) {
+        console.log("Searching for user with ID:", id); 
+
+        getUseri(id, function(error, users) { // `users` should be an array
+            if (error) {
+                alert(error);  
+            } else {
+                $('#userTableBody').empty();  // Clear existing table rows
+
+                // Filter the users array to find the user with the matching ID
+                const user = users.find(user => user.id == id);
+
+                if (user) {
+                    var userId = user.id ? user.id : '-';
+                    var username = user.username ? user.username : '-';
+                    var password = user.password ? user.password : '-';
+
+                    var row = '<tr>' +
+                        '<td>' + userId + '</td>' +
+                        '<td>' + username + '</td>' +
+                        '<td>' + password + '</td>' +
+                        '<td>' +
+                            '<button class="btn btn-info">Edit</button> ' +
+                            '<button class="btn btn-danger">Delete</button>' +
+                        '</td>' +
+                        '</tr>';
+
+                    $('#userTableBody').append(row);
+                } else {
+                    alert("No user found with the given ID.");
+                }
+            }
+        });
+    } else {
+        alert('Please enter a User ID to search.');  
+    }
+});
+
+
+});
+</script>
+
 
     <!-- Add User Button -->
     <button class="btn btn-success mb-3" data-bs-toggle="modal" data-bs-target="#addUserModal">
@@ -69,43 +143,55 @@
 </div>
        
    <script>
-        // Function to fetch users from the RESTful service
-        function fetchUsers() {
-            fetch('http://localhost:8080/Cab_services/resources/adminUser')  // Replace with your actual REST endpoint
-                .then(response => response.json())  // Parse the JSON response
-                .then(data => {
-                    displayUsers(data);  // Call the function to display users
-                })
-                .catch(error => console.error('Error fetching users:', error));
-        }
+    $(document).ready(function() {
+        function getUser() {
+            $.ajax({
+                url: 'http://localhost:8080/Cab_services/resources/user',  
+                type: 'GET',
+                dataType: 'json',
+                success: function(data) {
+                    console.log("Data received:", data);  
 
-        // Function to display the list of users in the table
-        function displayUsers(users) {
-            const usersTable = document.getElementById('usersTable');
-            usersTable.innerHTML = '';  // Clear previous content
+                    // Clear the existing table body
+                    $('#userTableBody').empty();
 
-            // Loop through each user and display them in the table
-            users.forEach(user => {
-                const row = document.createElement('tr');
-                const cell1 = document.createElement('td');
-                const cell2 = document.createElement('td');
-                const cell3 = document.createElement('td');
+                    // Check if data is valid and not empty
+                    if (Array.isArray(data) && data.length > 0) {
+                        $.each(data, function(index, user) {
+                            console.log(user);  // Log the user object
 
-                cell1.textContent = user.id;
-                cell2.textContent = user.username;
-                cell3.textContent = user.password;  // Be cautious about showing passwords
+                            // Ensure values exist to prevent "undefined" issues
+                            var userId = user.id ? user.id : '-';
+                            var username = user.username ? user.username : '-';
+                            var password = user.password ? user.password : '-';
 
-                row.appendChild(cell1);
-                row.appendChild(cell2);
-                row.appendChild(cell3);
+                            // Constructing the table row
+                            var row = '<tr>' +
+                                '<td>' + userId + '</td>' +
+                                '<td>' + username + '</td>' +
+                                '<td>' + password + '</td>' +
+                                '</tr>';
 
-                usersTable.appendChild(row);
+                            // Append the row to the table
+                            $('#userTableBody').append(row);
+                        });
+                    } else {
+                        // If no users are found, display a message in the table
+                        $('#userTableBody').html('<tr><td colspan="3" style="text-align:center;">No users found</td></tr>');
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error("Error fetching users:", xhr.responseText);
+                    alert('Error fetching user data. Please try again.');
+                }
             });
         }
 
-        // Call the fetchUsers function when the page loads
-        window.onload = fetchUsers;
-    </script>    
+        // Fetch user data when the page loads
+        getUser();
+    });
+</script>
+
        
        
 
