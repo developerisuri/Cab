@@ -10,13 +10,13 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Customer Register</title>
-         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+      
     </head>
     <body>
         <div class="container">
         <div class="form-container">
             <h2>Customer Registration</h2>
-            <form action="registerCustomer.jsp" method="POST">
+            <form id="customerForm">
                 <div class="form-group">
                     <label for="customer-name">Customer Name</label>
                     <input type="text" id="customer-name" name="customerName" required placeholder="Enter your name">
@@ -228,7 +228,7 @@ button.processing::after {
     </style>
     
     <script>
-  const button = document.querySelector('button');
+ // const button = document.querySelector('button');
 
   //button.addEventListener('click', function () {
     // Add the 'processing' class when the button is clicked
@@ -244,79 +244,47 @@ button.processing::after {
 </script>
 
 
+ <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+< <script>
+       
+    $(document).ready(function() {
+        // Handle form submission for customer registration
+        $('#customerForm').submit(function(e) {
+            e.preventDefault();  // Prevent normal form submission
 
-<script>
-        $(document).ready(function() {
-            // Check if customer exists on signId input change
-            $('#signId').change(function() {
-                var signId = $(this).val();
+            // Get the customer data
+            let name = $('#customer-name').val();
+            let address = $('#address').val();
+            let nic = $('#nic').val();
+            let telephone = $('#telephone').val();
 
-                // Send GET request to check if the customer exists
-                $.ajax({
-                    url: 'http://localhost:808/Cab_services/customers/check', // Update with the correct URL
-                    type: 'GET',
-                    contentType: 'application/json',
-                    data: JSON.stringify({ signId: signId }),
-                    success: function(response) {
-                        // If the customer exists, show message and enable registration
-                        if (response.redirectUrl === '/customerMenu') {
-                            $('#message').html('<p style="color: green;">Customer exists. Redirecting to customer menu.</p>');
-                            $('#customer-name').prop('disabled', true);
-                            $('#address').prop('disabled', true);
-                            $('#nic').prop('disabled', true);
-                            $('#telephone').prop('disabled', true);
-                            $('.btn-submit').prop('disabled', true);
-                        }
-                    },
-                    error: function(xhr, status, error) {
-                        // If the customer doesn't exist, enable form fields for registration
-                        if (xhr.status === 404) {
-                            $('#message').html('<p style="color: red;">Customer does not exist. Proceed with registration.</p>');
-                            $('#customer-name').prop('disabled', false);
-                            $('#address').prop('disabled', false);
-                            $('#nic').prop('disabled', false);
-                            $('#telephone').prop('disabled', false);
-                            $('.btn-submit').prop('disabled', false);
-                        } else {
-                            $('#message').html('<p style="color: red;">An error occurred. Please try again.</p>');
-                        }
-                    }
-                });
-            });
+            // Prepare the data to send in JSON format
+            let customerData = {
+                "name": name,
+                "address": address,
+                "nic": nic,
+                "telephone": telephone
+            };
 
-            // Handle form submission for registration
-            $('#customer-form').submit(function(event) {
-                event.preventDefault(); // Prevent the default form submission
-
-                // Get form data
-                var formData = {
-                    signId: $('#signId').val(),
-                    customerName: $('#customer-name').val(),
-                    address: $('#address').val(),
-                    nic: $('#nic').val(),
-                    telephone: $('#telephone').val()
-                };
-
-                // Send POST request to register customer
-                $.ajax({
-                    url: 'http://localhost:8080/Cab_services/customers/register', // Update with the correct URL
-                    type: 'POST',
-                    contentType: 'application/json',
-                    data: JSON.stringify(formData),
-                    success: function(response) {
-                        // Display success message
-                        $('#message').html(`<p style="color: green;">${response.message}</p>`);
-                    },
-                    error: function(xhr, status, error) {
-                        // Display error message
-                        var errorMessage = 'An error occurred. Please try again.';
-                        if (xhr.responseJSON && xhr.responseJSON.message) {
-                            errorMessage = xhr.responseJSON.message;
-                        }
-                        $('#message').html(`<p style="color: red;">${errorMessage}</p>`);
-                    }
-                });
+            // Send the AJAX request to the backend to add a new customer
+            $.ajax({
+                url: 'http://localhost:8080/Cab_services/resources/customers', // Adjust URL to your actual API endpoint
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify(customerData),
+                success: function(response) {
+                    // If successful, notify user and redirect to the customer menu or login page
+                    alert('Customer registered successfully!');
+                    window.location.href = 'customerMenu.jsp';  // Redirect after success (adjust as needed)
+                },
+                error: function(xhr, status, error) {
+                    // Handle the error and display the response from the server
+                    alert('Registration failed: ' + xhr.responseText);  // Display server response message
+                }
             });
         });
+     });
+</script>
+
     </script>
 </html>
