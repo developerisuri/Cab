@@ -53,51 +53,72 @@
         <h1>Booking Page</h1>
 
     <!-- Form to Display & Insert Data -->
-    <form action="SubmitBookingServlet" method="POST">
-        <div>
-            <label for="customerRegisterNumber">Customer Register Number:</label>
-            <input type="text" id="customerRegisterNumber" name="customerRegisterNumber" value="${customerRegisterNumber}" readonly />
-        </div>
+<form >
+    <div>
+        <label for="customerName">Customer Name:</label>
+        <input type="text" id="customerName" name="customerName" required />
+    </div>
 
-        <div>
-            <label for="orderNumber">Order Number:</label>
-            <input type="text" id="orderNumber" name="orderNumber" value="${orderNumber}" readonly />
-        </div>
+    <div>
+        <label for="customerAddress">Customer Address:</label>
+        <input type="text" id="customerAddress" name="customerAddress" required />
+    </div>
 
-        <div>
-            <label for="destination">Destination Name:</label>
-            <input type="text" id="destination" name="destination" required />
-        </div>
+    <div>
+        <label for="customerTelephone">Telephone Number:</label>
+        <input type="text" id="customerTelephone" name="customerTelephone" required />
+    </div>
 
-        <div>
-            <label for="kilometers">Kilometers:</label>
-            <input type="number" id="kilometers" name="kilometers" required />
-        </div>
+    <div>
+        <label for="destination">Destination Name:</label>
+        <input type="text" id="destination" name="destination" required />
+    </div>
 
-        <div>
-            <label for="vehicle">Vehicle:</label>
-            <select id="vehicle" name="vehicle" required>
-                <option value="">Select Vehicle</option>
-                <c:forEach var="vehicle" items="${vehicleList}">
-                    <option value="${vehicle.id}">${vehicle.name}</option>
-                </c:forEach>
-            </select>
-        </div>
+    <div>
+        <label for="kilometers">Kilometers:</label>
+        <input type="number" id="kilometers" name="kilometers" required />
+    </div>
 
-        <div>
-            <label for="driver">Driver:</label>
-            <select id="driver" name="driver" required>
-                <option value="">Select Driver</option>
-                <c:forEach var="driver" items="${driverList}">
-                    <option value="${driver.id}">${driver.name}</option>
-                </c:forEach>
-            </select>
-        </div>
+    <div>
+        <label for="vehicle">Select Vehicle:</label>
+    <select id="vehicle" name="vehicle" required>
+        <option value="">Select Vehicle</option>
+        <c:forEach var="vehicle" items="${vehicleList}">
+            <option value="${vehicle.id}">${vehicle.model}</option>
+        </c:forEach>
+    </select>
+    </div>
 
-        <div>
-            <button type="submit">Submit Booking</button>
-        </div>
-    </form>
+    <div>
+        <label for="driver">Driver:</label>
+        <select id="driver" name="driver" required>
+            <option value="">Select Driver</option>
+            <c:forEach var="driver" items="${driverList}">
+                <option value="${driver.id}">${driver.name}</option>
+            </c:forEach>
+        </select>
+    </div>
+
+    <div>
+        <button type="submit">Submit Booking</button>
+    </div>
+</form>
+
+            
+            <div id="bookingModal" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            background: white; padding: 20px; box-shadow: 0px 0px 10px gray;">
+    <h2>Booking Details</h2>
+    <p><strong>Order Number:</strong> <span id="bookingOrderNum"></span></p>
+    <p><strong>Customer Name:</strong> <span id="bookingCustomerName"></span></p>
+    <p><strong>Address:</strong> <span id="bookingAddress"></span></p>
+    <p><strong>Telephone:</strong> <span id="bookingTelephone"></span></p>
+    <p><strong>Destination:</strong> <span id="bookingDestination"></span></p>
+    <p><strong>Kilometers:</strong> <span id="bookingKilometers"></span></p>
+    <p><strong>Vehicle:</strong> <span id="bookingVehicle"></span></p>
+    <p><strong>Driver:</strong> <span id="bookingDriver"></span></p>
+    <button class="close">Close</button>
+</div>
+
 
     </body>
     
@@ -777,19 +798,125 @@ footer .social-icons a {
 </script>
 
 <script>
-  const button = document.querySelector('button');
+ // const button = document.querySelector('button');
 
-  button.addEventListener('click', function () {
+ // button.addEventListener('click', function () {
     // Add the 'processing' class when the button is clicked
-    button.classList.add('processing');
+  //  button.classList.add('processing');
 
     // Simulate an API call or some processing task with a delay (e.g., 3 seconds)
-    setTimeout(function () {
+   // setTimeout(function () {
       // Remove the 'processing' class after the task is done
-      button.classList.remove('processing');
-      alert('Processing complete!');
-    }, 3000); // Simulate a 3-second delay
-  });
+    //  button.classList.remove('processing');
+     // alert('Processing complete!');
+   // }, 3000); // Simulate a 3-second delay
+ // });
+</script>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+    $(document).ready(function() {
+        // Handle booking form submission
+        $('form').submit(function(event) {
+            event.preventDefault();  // Prevent default form submission
+
+            // Collect form data into JSON format
+            let bookingData = {
+                customerName: $('#cname').val(),
+                customerAddress: $('#caddress').val(),
+                customerTelephone: $('#ctele').val(),
+                destination: $('#destination').val(),
+                kilometers: parseInt($('#km').val()),
+                vehicle: parseInt($('#vehicle_id').val()),
+                driver: parseInt($('#driver_id').val())
+            };
+
+            // Send AJAX request to insert booking
+            $.ajax({
+                url: 'http://localhost:8080/Cab_services/resources/bookings',
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify(bookingData),
+                success: function(response) {
+                    alert('Booking Created Successfully!'); // Confirmation
+                    fetchLatestBooking(); // Fetch and display the latest booking
+                },
+                error: function(xhr, status, error) {
+                    alert('Booking Failed: ' + xhr.responseText); // Error alert
+                }
+            });
+        });
+
+        // Function to fetch and display the latest booking
+        function fetchLatestBooking() {
+            $.ajax({
+                url: 'http://localhost:8080/Cab_services/resources/bookings ',
+                type: 'GET',
+                dataType: 'json',
+                success: function(booking) {
+                    // Populate modal fields with booking details
+                    $('#bookingOrderNum').text(booking.ordernum);
+                    $('#bookingCustomerName').text(booking.cname);
+                    $('#bookingAddress').text(booking.caddress);
+                    $('#bookingTelephone').text(booking.ctele);
+                    $('#bookingDestination').text(booking.destination);
+                    $('#bookingKilometers').text(booking.km);
+                    $('#bookingVehicle').text(booking.vehicleName);
+                    $('#bookingDriver').text(booking.driverName);
+
+                    // Show modal
+                    $('#bookingModal').fadeIn();
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error fetching latest booking:', xhr.responseText);
+                }
+            });
+        }
+
+        // Close modal when "Close" button is clicked
+        $('.close').click(function() {
+            $('#bookingModal').fadeOut();
+        });
+    });
+</script>
+
+<script>
+    $(document).ready(function () {
+        // Fetch vehicle list
+        $.ajax({
+            url: "http://localhost:8080/Cab_services/resources/booking/vehicles",
+            type: "GET",
+            contentType: "application/json",
+            success: function (vehicles) {
+                let vehicleDropdown = $("#vehicle");
+                vehicleDropdown.empty().append('<option value="">Select Vehicle</option>');
+                $.each(vehicles, function (index, vehicle) {
+                    vehicleDropdown.append('<option value="' + vehicle.id + '">' + vehicle.model + '</option>');
+                });
+            },
+            error: function () {
+                alert("Failed to load vehicles.");
+            }
+        });
+
+        // Fetch driver list
+        $.ajax({
+            url: "http://localhost:8080/Cab_services/resources/booking/drivers",
+            type: "GET",
+            contentType: "application/json",
+            success: function (drivers) {
+                let driverDropdown = $("#driver");
+                driverDropdown.empty().append('<option value="">Select Driver</option>');
+                $.each(drivers, function (index, driver) {
+                    driverDropdown.append('<option value="' + driver.id + '">' + driver.name + '</option>');
+                });
+            },
+            error: function () {
+                alert("Failed to load drivers.");
+            }
+        });
+    });
 </script>
 
 </html>
