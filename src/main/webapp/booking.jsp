@@ -10,6 +10,8 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Customer Booking</title>
+        <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+
         <nav>
     <div class="logo-container">
     <div class="logo-text">Mega City Cab</div>
@@ -84,20 +86,37 @@
     <select id="vehicle" name="vehicle" required>
         <option value="">Select Vehicle</option>
         <c:forEach var="vehicle" items="${vehicleList}">
-            <option value="${vehicle.id}">${vehicle.model}</option>
+            <option value="${vehicle.vehicleId}">${vehicle.model}</option>
         </c:forEach>
     </select>
     </div>
+        
+        
+        <!--select name="vehicle">
+    <option value="vehicle">Select a Vehicle</option>
+    <//c:forEach var="vehicle" items="${vehicles}">
+        <option value="${vehicle.vehicleId}">${vehicle.model}</option>
+    <///c:forEach>
+</select>
+    </div-->
 
     <div>
         <label for="driver">Driver:</label>
         <select id="driver" name="driver" required>
             <option value="">Select Driver</option>
             <c:forEach var="driver" items="${driverList}">
-                <option value="${driver.id}">${driver.name}</option>
+                <option value="${driver.driverId}">${driver.name}</option>
             </c:forEach>
         </select>
     </div>
+
+        
+        <!--select name="driver">
+    <option value="driver">Select a Driver</option>
+    <//c:forEach var="driver" items="${drivers}">
+        <option value="${driver.driverId}">${driver.name}</option>
+    <///c:forEach>
+</select-->
 
     <div>
         <button type="submit">Submit Booking</button>
@@ -816,107 +835,157 @@ footer .social-icons a {
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 <script>
-    $(document).ready(function() {
+    $(document).ready(function () {
         // Handle booking form submission
-        $('form').submit(function(event) {
-            event.preventDefault();  // Prevent default form submission
+        $('form').submit(function (event) {
+            event.preventDefault(); // Prevent default form submission
 
-            // Collect form data into JSON format
+            // Collect form data
+            let vehicleValue = $('#vehicle').val();
+            let driverValue = $('#driver').val();
+            
+            console.log("Selected Vehicle ID:", vehicleValue);
+        console.log("Selected Driver ID:", driverValue);
+        
             let bookingData = {
-                customerName: $('#cname').val(),
-                customerAddress: $('#caddress').val(),
-                customerTelephone: $('#ctele').val(),
+                cname: $('#cname').val(),
+                caddress: $('#caddress').val(),
+                ctele: $('#ctele').val(),
                 destination: $('#destination').val(),
-                kilometers: parseInt($('#km').val()),
-                vehicle: parseInt($('#vehicle_id').val()),
-                driver: parseInt($('#driver_id').val())
+                km: parseInt($('#km').val(), 10) || 0,  // Convert and validate
+                vehicleId: vehicleValue ? parseInt(vehicleValue, 10) : null, // Ensure valid ID
+                driverId: driverValue ? parseInt(driverValue, 10) : null    // Ensure valid ID
             };
 
-            // Send AJAX request to insert booking
-            $.ajax({
-                url: 'http://localhost:8080/Cab_services/resources/bookings',
-                type: 'POST',
-                contentType: 'application/json',
-                data: JSON.stringify(bookingData),
-                success: function(response) {
-                    alert('Booking Created Successfully!'); // Confirmation
-                    fetchLatestBooking(); // Fetch and display the latest booking
-                },
-                error: function(xhr, status, error) {
-                    alert('Booking Failed: ' + xhr.responseText); // Error alert
-                }
-            });
-        });
+            console.log("Booking data to submit:", bookingData);
 
-        // Function to fetch and display the latest booking
-        function fetchLatestBooking() {
-            $.ajax({
-                url: 'http://localhost:8080/Cab_services/resources/bookings ',
-                type: 'GET',
-                dataType: 'json',
-                success: function(booking) {
-                    // Populate modal fields with booking details
-                    $('#bookingOrderNum').text(booking.ordernum);
-                    $('#bookingCustomerName').text(booking.cname);
-                    $('#bookingAddress').text(booking.caddress);
-                    $('#bookingTelephone').text(booking.ctele);
-                    $('#bookingDestination').text(booking.destination);
-                    $('#bookingKilometers').text(booking.km);
-                    $('#bookingVehicle').text(booking.vehicleName);
-                    $('#bookingDriver').text(booking.driverName);
+            // Ensure vehicle and driver are selected
+            if (!bookingData.vehicleId || isNaN(bookingData.vehicleId)) {
+                alert("Please select a valid vehicle.");
+                return;
+            }
+            if (!bookingData.driverId || isNaN(bookingData.driverId)) {
+                alert("Please select a valid driver.");
+                return;
+            }
 
-                    // Show modal
-                    $('#bookingModal').fadeIn();
-                },
-                error: function(xhr, status, error) {
-                    console.error('Error fetching latest booking:', xhr.responseText);
-                }
-            });
-        }
-
-        // Close modal when "Close" button is clicked
-        $('.close').click(function() {
-            $('#bookingModal').fadeOut();
+            // Call function to insert booking
+            insertBooking(bookingData);
         });
     });
+
+    // Function to insert booking into RESTful API
+    function insertBooking(bookingData) {
+        $.ajax({
+            url: 'http://localhost:8080/Cab_services/resources/bookings', // Ensure correct endpoint
+            type: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify(bookingData),
+            success: function (response) {
+                alert('Booking Created Successfully!');
+                fetchLatestBooking(); // Call function to refresh bookings
+            },
+            error: function (xhr, status, error) {
+                console.error("Error inserting booking:", xhr.responseText); // Debugging log
+                alert('Booking Failed: ' + xhr.responseText);
+            }
+        });
+    }
+
+    // Function to fetch and display the latest bookings
+    function fetchLatestBooking() {
+        $.ajax({
+            url: 'http://localhost:8080/Cab_services/resources/bookings', // Adjust the API endpoint if needed
+            type: 'GET',
+            contentType: 'application/json',
+            success: function (data) {
+                console.log("Latest booking:", data);
+                // Update UI with latest booking details if needed
+            },
+            error: function (xhr, status, error) {
+                console.error("Error fetching latest booking:", xhr.responseText);
+            }
+        });
+    }
 </script>
 
 <script>
     $(document).ready(function () {
-        // Fetch vehicle list
-        $.ajax({
-            url: "http://localhost:8080/Cab_services/resources/booking/vehicles",
-            type: "GET",
-            contentType: "application/json",
-            success: function (vehicles) {
-                let vehicleDropdown = $("#vehicle");
-                vehicleDropdown.empty().append('<option value="">Select Vehicle</option>');
-                $.each(vehicles, function (index, vehicle) {
-                    vehicleDropdown.append('<option value="' + vehicle.id + '">' + vehicle.model + '</option>');
-                });
-            },
-            error: function () {
-                alert("Failed to load vehicles.");
-            }
-        });
+    // Fetch vehicle list
+    $.ajax({
+        url: "http://localhost:8080/Cab_services/resources/vehicles",
+        type: "GET",
+        contentType: "application/json",
+        success: function (response) {
+            let vehicleDropdown = $("#vehicle");
+            vehicleDropdown.empty().append('<option value="">Select Vehicle</option>');
 
-        // Fetch driver list
-        $.ajax({
-            url: "http://localhost:8080/Cab_services/resources/booking/drivers",
-            type: "GET",
-            contentType: "application/json",
-            success: function (drivers) {
-                let driverDropdown = $("#driver");
-                driverDropdown.empty().append('<option value="">Select Driver</option>');
-                $.each(drivers, function (index, driver) {
-                    driverDropdown.append('<option value="' + driver.id + '">' + driver.name + '</option>');
-                });
-            },
-            error: function () {
-                alert("Failed to load drivers.");
+            if (!response || response.length === 0) {
+                console.error("No vehicles found in API response", response);
+                alert("No vehicles available.");
+                return;
             }
-        });
+
+            console.log("Fetched Vehicles:", response); // ✅ Log API response
+
+            $.each(response, function (index, vehicle) {
+                let vehicleId = vehicle.vehicleId || vehicle.id; // Handle different property names
+                let vehicleModel = vehicle.model || vehicle.model; // Handle different naming
+
+                if (!vehicleId || !vehicleModel) {
+                    console.error("Invalid vehicle data at index", index, ":", vehicle);
+                    return;
+                }
+
+                vehicleDropdown.append('<option value="' + vehicleId + '">' + vehicleModel + '</option>');
+            });
+
+            console.log("Vehicle Dropdown Options Count:", $('#vehicle option').length);
+        },
+        error: function (xhr, status, error) {
+            console.error("Error fetching vehicles:", xhr.responseText);
+            alert("Failed to load vehicles.");
+        }
     });
+
+    // Fetch driver list
+    $.ajax({
+        url: "http://localhost:8080/Cab_services/resources/drivers",
+        type: "GET",
+        contentType: "application/json",
+        success: function (response) {
+            let driverDropdown = $("#driver");
+            driverDropdown.empty().append('<option value="">Select Driver</option>');
+
+            if (!response || response.length === 0) {
+                console.error("No drivers found in API response", response);
+                alert("No drivers available.");
+                return;
+            }
+
+            console.log("Fetched Drivers:", response); // ✅ Log API response
+
+            $.each(response, function (index, driver) {
+                let driverId = driver.driverId || driver.id; // Handle different property names
+                let driverName = driver.name || driver.name; // Handle different naming
+
+                if (!driverId || !driverName) {
+                    console.error("Invalid driver data at index", index, ":", driver);
+                    return;
+                }
+
+                driverDropdown.append('<option value="' + driverId + '">' + driverName + '</option>');
+            });
+
+            console.log("Driver Dropdown Options Count:", $('#driver option').length);
+        },
+        error: function (xhr, status, error) {
+            console.error("Error fetching drivers:", xhr.responseText);
+            alert("Failed to load drivers.");
+        }
+    });
+});
+
 </script>
 
 </html>
