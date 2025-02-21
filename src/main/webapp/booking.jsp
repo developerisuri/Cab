@@ -848,11 +848,11 @@ footer .social-icons a {
         console.log("Selected Driver ID:", driverValue);
         
             let bookingData = {
-                cname: $('#cname').val(),
-                caddress: $('#caddress').val(),
-                ctele: $('#ctele').val(),
+                cname: $('#customerName').val(),
+                caddress: $('#customerAddress').val(),
+                ctele: $('#customerTelephone').val(),
                 destination: $('#destination').val(),
-                km: parseInt($('#km').val(), 10) || 0,  // Convert and validate
+                km: parseInt($('#kilometers').val(), 10) || 0,  // Convert and validate
                 vehicleId: vehicleValue ? parseInt(vehicleValue, 10) : null, // Ensure valid ID
                 driverId: driverValue ? parseInt(driverValue, 10) : null    // Ensure valid ID
             };
@@ -894,19 +894,53 @@ footer .social-icons a {
 
     // Function to fetch and display the latest bookings
     function fetchLatestBooking() {
-        $.ajax({
-            url: 'http://localhost:8080/Cab_services/resources/bookings', // Adjust the API endpoint if needed
-            type: 'GET',
-            contentType: 'application/json',
-            success: function (data) {
-                console.log("Latest booking:", data);
-                // Update UI with latest booking details if needed
-            },
-            error: function (xhr, status, error) {
-                console.error("Error fetching latest booking:", xhr.responseText);
-            }
-        });
+       $.ajax({
+        url: 'http://localhost:8080/Cab_services/resources/bookings/latest', // Ensure this endpoint returns the most recent booking
+        type: 'GET',
+        contentType: 'application/json',
+       success: function (data) {
+            console.log("Latest booking:", data);
+
+            // Use fallback operators to handle different JSON key naming conventions
+            $("#bookingOrderNum").text(data.ordernum || data.orderNum || "");
+            $("#bookingCustomerName").text(data.cname || data.customerName || "");
+            $("#bookingAddress").text(data.caddress || data.address || "");
+            $("#bookingTelephone").text(data.ctele || data.telephone || "");
+            $("#bookingDestination").text(data.destination || "");
+            $("#bookingKilometers").text(data.km || data.kilometers || "");
+
+            // Display vehicle ID directly (try both key variants)
+            $("#bookingVehicle").text(data.vehicle_id || data.vehicleId || "");
+            
+            // Display driver ID directly (try both key variants)
+            $("#bookingDriver").text(data.driver_id || data.driverId || "");
+
+            // Show the modal
+            $("#bookingModal").css("display", "block");
+        },
+        error: function (xhr, status, error) {
+            console.error("Error fetching latest booking:", xhr.responseText);
+        }
+    });
     }
+
+// Event listener for submit button
+$(document).ready(function () {
+    $("#submitBooking").click(function (event) {
+        event.preventDefault(); // Prevent default form submission
+        fetchLatestBooking(); // Fetch and display the latest booking
+    });
+
+    // Close modal event
+   $(".close").click(function () {
+    // Hide the modal
+    $("#bookingModal").css("display", "none");
+
+    // Redirect the user to bill.jsp
+    window.location.href = "billDetails.jsp"; // Adjust the path if necessary
+    });
+    });
+    
 </script>
 
 <script>

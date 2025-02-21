@@ -10,6 +10,7 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Booking Details</title>
+         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         
          <nav>
     <div class="logo-container">
@@ -61,14 +62,16 @@
   <div id="bookingDetails" class="booking-details" style="display:none;">
     <h3>Booking Information</h3>
     <ul>
-      <li><strong>Booking ID:</strong> <span id="customerRegisterNumber"></span></li>
-      <li><strong>Customer Register Number:</strong> <span id="customerRegisterNumber"></span></li>
-      <li><strong>Destination:</strong> <span id="destination"></span></li>
-      <li><strong>Vehicle Type:</strong> <span id="vehicleType"></span></li>
-      <li><strong>Driver:</strong> <span id="driver"></span></li>
-      <li><strong>Date & Time:</strong> <span id="dateTime"></span></li>
+        <li><strong>Booking ID:</strong> <span id="bookId"></span></li>
+        <li><strong>Order Number:</strong> <span id="orderNum"></span></li>
+        <li><strong>Customer Name:</strong> <span id="customerName"></span></li>
+        <li><strong>Customer Address:</strong> <span id="customerAddress"></span></li>
+        <li><strong>Destination:</strong> <span id="destination"></span></li>
+        <li><strong>Kilometers:</strong> <span id="kilometers"></span></li>
+        <li><strong>Vehicle ID:</strong> <span id="vehicleId"></span></li>
+        <li><strong>Driver ID:</strong> <span id="driverId"></span></li>
     </ul>
-  </div>
+</div>
 
   <!-- Error Message (Initially Hidden) -->
   <div id="errorMessage" class="error-message" style="display:none;">
@@ -455,4 +458,59 @@ li strong {
         nav.classList.toggle('active');
     }
 </script>
+
+ <script>
+    $(document).ready(function() {
+        // Function to fetch booking details by order number
+        function getBookingByOrderNum(orderNum) {
+            $.ajax({
+                url: 'http://localhost:8080/Cab_services/resources/bookings/' + orderNum, // Adjust API endpoint
+                type: 'GET',
+                contentType: 'application/json',
+                success: function(booking) {
+                    console.log("Booking data received:", booking);  
+
+                    if (booking) {
+                        // Populate UI with booking details
+                        $("#bookId").text(booking.bookId);
+                        $("#orderNum").text(booking.ordernum);
+                        $("#customerName").text(booking.cname);
+                        $("#customerAddress").text(booking.caddress);
+                        $("#destination").text(booking.destination);
+                        $("#kilometers").text(booking.km);
+                        $("#vehicleId").text(booking.vehicleId);
+                        $("#driverId").text(booking.driverId);
+
+                        // Show booking details section
+                        $("#bookingDetails").css("display", "block");
+                        $("#errorMessage").css("display", "none"); // Hide error message
+                    } else {
+                        $("#bookingDetails").css("display", "none");
+                        $("#errorMessage").css("display", "block").text("No booking found for this order number.");
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error("Error fetching booking:", xhr.responseText);
+                    $("#bookingDetails").css("display", "none");
+                    $("#errorMessage").css("display", "block").text("Error fetching booking. Please try again.");
+                }
+            });
+        }
+
+        // Handle search button click
+        $("#searchButton").click(function(e) {
+            e.preventDefault();
+            let orderNum = $("#orderNumber").val().trim(); // Get order number input
+
+            if (orderNum) {
+                console.log("Searching for booking with Order Number:", orderNum);
+                getBookingByOrderNum(orderNum);
+            } else {
+                alert("Please enter an Order Number.");
+            }
+        });
+    });
+</script>
+
+
 </html>
