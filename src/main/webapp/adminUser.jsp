@@ -96,8 +96,10 @@
                         '<td>' + username + '</td>' +
                         '<td>' + password + '</td>' +
                         '<td>' +
-                            '<button class="btn btn-info">Edit</button> ' +
-                            '<button class="btn btn-danger">Delete</button>' +
+                             '<button class="btn btn-info editUserBtn" data-bs-toggle="modal" data-bs-target="#editUserModal" data-id="' + userId + '" data-username="' + username + '" data-password="' + password + '">' +
+                            '<i class="fas fa-edit"></i> Edit</button> ' +
+                            '<button class="btn btn-danger deleteUserBtn" data-id="' + userId + '">' +
+                            '<i class="fas fa-trash-alt"></i> Delete</button>' +
                         '</td>' +
                         '</tr>';
 
@@ -270,6 +272,8 @@
             <div class="modal-body">
                 <form id="editUserForm">
                     <div class="mb-3">
+                        
+
                         <label for="editUserUsername" class="form-label">Username</label>
                         <input type="text" class="form-control" id="editUserUsername" required>
                     </div>
@@ -284,6 +288,8 @@
         </div>
     </div>
 </div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
 
 $(document).ready(function () {
@@ -322,15 +328,24 @@ $(document).ready(function () {
     }
 
     // Function to open the edit modal and fill it with user data
-    $(document).on("click", ".editUserBtn", function () {
-        let userId = $(this).data("id");
-        let username = $(this).data("username");
-        let password = $(this).data("password");
+   $(document).on("click", ".editUserBtn", function () {
+    let userId = $(this).attr("data-id");
+    let username = $(this).attr("data-username");
+    let password = $(this).attr("data-password");
 
-        $("#editUserId").val(userId);
-        $("#editUserUsername").val(username);
-        $("#editUserPassword").val(password);
-    });
+    console.log("User ID from button:", userId); // Debugging
+    console.log("Username from button:", username);
+    console.log("Password from button:", password);
+
+    if (!userId || userId === "undefined" || userId === "-") {
+        alert("Error: User ID is missing. Please check if your table loads correctly.");
+        return;
+    }
+
+    $("#editUserId").val(userId);
+    $("#editUserUsername").val(username);
+    $("#editUserPassword").val(password);
+});
 
     // Function to handle user update
    // Function to handle user update
@@ -339,19 +354,26 @@ function updateUser() {
     let username = $("#editUserUsername").val();
     let password = $("#editUserPassword").val();
 
-    if (!userId || !username || !password) {
+    console.log("User ID:", userId);   // Debugging
+    console.log("Username:", username);
+    console.log("Password:", password);
+
+    // Check if fields are empty or null
+    if (userId === "" || username === "" || password === "" || userId === null || username=== null || password === null) {
         alert("Please fill in all fields.");
         return;
     }
 
     let userData = {
-        id: userId,
+        id: parseInt(userId),  // Ensure ID is a number
         username: username,
         password: password
     };
 
+    console.log("Sending JSON:", JSON.stringify(userData));  // Debugging
+
     $.ajax({
-        url: 'http://localhost:8080/Cab_services/resources/adminUser', // Ensure this URL is correct
+        url: 'http://localhost:8080/Cab_services/resources/adminUser/update', // Ensure this URL is correct
         type: 'PUT',
         contentType: 'application/json',
         data: JSON.stringify(userData),
@@ -398,6 +420,83 @@ $("#editUserForm").submit(function (e) {
         </div>
     </div>
 </div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+$(document).ready(function () {
+    // Function to delete a user
+    $(document).on("click", ".deleteUserBtn", function () {
+        let userId = $(this).attr("data-id");
+
+        console.log("User ID to delete:", userId); // Debugging
+
+        if (!userId || userId === "undefined" || userId === "-") {
+            alert("Error: User ID is missing.");
+            return;
+        }
+
+        // Show confirmation modal
+        $("#deleteUserModal").modal("show");
+
+        // Set the delete button action
+        $("#deleteUserBtn").off("click").on("click", function () {
+            $.ajax({
+                url:`http://localhost:8080/Cab_services/resources/adminUser`,
+                type: "DELETE",
+                success: function (response) {
+                    alert("User deleted successfully!");
+                    $("#deleteUserModal").modal("hide");
+                    loadUsers(); // Refresh the user list
+                },
+                error: function (xhr) {
+                    console.error("Delete failed:", xhr.responseText);
+                    alert("Error deleting user: " + xhr.responseText);
+                }
+            });
+        });
+    });
+
+    // Function to load users
+    function loadUsers() {
+        $.ajax({
+            url: "http://localhost:8080/Cab_services/resources/adminUser",
+            type: "GET",
+            dataType: "json",
+            success: function (users) {
+                $("#userTableBody").empty();
+                users.forEach(user => {
+                    var userId = user.id ? user.id : '-';
+                    var username = user.username ? user.username : '-';
+                    var password = user.password ? user.password : '-';
+
+                    var row = '<tr>' +
+                        '<td>' + userId + '</td>' +
+                        '<td>' + username + '</td>' +
+                        '<td>' + password + '</td>' +
+                        '<td>' +
+                            '<button class="btn btn-info editUserBtn" data-bs-toggle="modal" data-bs-target="#editUserModal" data-id="' + userId + '" data-username="' + username + '" data-password="' + password + '">' +
+                            '<i class="fas fa-edit"></i> Edit</button> ' +
+                            '<button class="btn btn-danger deleteUserBtn" data-id="' + userId + '">' +
+                            '<i class="fas fa-trash-alt"></i> Delete</button>' +
+                        '</td>' +
+                        '</tr>';
+
+                    $('#userTableBody').append(row);
+                });
+            },
+            error: function () {
+                alert("Error loading users.");
+            }
+        });
+    }
+
+
+    // Load users when page loads
+    loadUsers();
+});
+
+</script>
+
 
 <!-- Bootstrap JS -->
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
