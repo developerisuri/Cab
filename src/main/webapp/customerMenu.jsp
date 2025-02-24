@@ -70,7 +70,7 @@
                 <a href="bookingDetails.jsp" class="btn btn-details">Booking Details</a>
             </div>
             <div class="button-container">
-                <a href="billDetails.jsp" class="btn btn-bill">Bill Details</a>
+                <a href="billing.jsp" class="btn btn-bill">Bill Details</a>
             </div>
             <div class="button-container">
                 <a href="vehicleInfo.jsp" class="btn btn-vehicle">Vehicle Info</a>

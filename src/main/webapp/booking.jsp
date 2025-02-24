@@ -937,7 +937,7 @@ $(document).ready(function () {
     $("#bookingModal").css("display", "none");
 
     // Redirect the user to bill.jsp
-    window.location.href = "billDetails.jsp"; // Adjust the path if necessary
+    window.location.href = "billing.jsp"; // Adjust the path if necessary
     });
     });
     
