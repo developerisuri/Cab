@@ -43,6 +43,8 @@
         <button class="btn btn-primary" type="submit" id="searchBtn">Search</button>
     </form>
     
+    
+    
    <script>
     $(document).ready(function() {
         // Service function to fetch user by ID from the backend

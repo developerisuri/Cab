@@ -104,7 +104,7 @@
                     <div class="card-body">
                         <h5 class="card-title">Manage Vehicle Information</h5>
                         <p class="card-description">View and manage vehicle information</p>
-                        <a href="<%= request.getContextPath() %>/analytics-dashboard.jsp" class="btn btn-custom">Go to Page</a>
+                        <a href="<%= request.getContextPath() %>/Avehicle.jsp" class="btn btn-custom">Go to Page</a>
                     </div>
                 </div>
             </div>
@@ -114,7 +114,7 @@
                     <div class="card-body">
                         <h5 class="card-title">Manage Driver Information</h5>
                         <p class="card-description">View and manage the driver information</p>
-                        <a href="<%= request.getContextPath() %>/analytics-dashboard.jsp" class="btn btn-custom">Go to Page</a>
+                        <a href="<%= request.getContextPath() %>/Adriver.jsp" class="btn btn-custom">Go to Page</a>
                     </div>
                 </div>
             </div>
@@ -125,7 +125,7 @@
                     <div class="card-body">
                         <h5 class="card-title">Help Instructions</h5>
                         <p class="card-description">Update customer instructions for the portal</p>
-                        <a href="<%= request.getContextPath() %>/settings.jsp" class="btn btn-custom">Go to Page</a>
+                        <a href="<%= request.getContextPath() %>/Ahelp.jsp" class="btn btn-custom">Go to Page</a>
                     </div>
                 </div>
             </div>

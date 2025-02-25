@@ -37,11 +37,11 @@
     
 
         <!-- Help Button on the Left with an Image -->
-<div class="help-btn">
+<!--div class="help-btn">
     <a href="help.jsp" class="btn btn-help" alt="Help Icon">
         
     </a>
-</div>
+</div-->
 
     <!-- Logout Button on the Right -->
     <div class="logout-btn">
@@ -51,11 +51,11 @@
     <body>
     
         <!-- Help Button on the Left with an Image -->
-<div class="help-btn">
+<!--div class="help-btn">
     <a href="help.jsp" class="btn btn-help" alt="Help Icon">
         
     </a>
-</div>
+</div-->
 
     <!-- Logout Button on the Right -->
     <div class="logout-btn">
@@ -392,14 +392,16 @@ function fetchLatestBooking() {
 
             // Populate fields only if data exists
             document.getElementById("orderNum").value = data.orderNum || "";
-            document.getElementById("customerName").value = data.customerName || "";
-            document.getElementById("km").value = data.km || 0;
-            document.getElementById("baseFare").value = data.baseFare || 0;
-            document.getElementById("kmAmount").value = data.kmAmount || 0;
-            document.getElementById("tax").value = data.tax || 0;
-            document.getElementById("discount").value = data.discount || 0;
-            document.getElementById("driverFees").value = data.driverFees || 0;
-            document.getElementById("totalAmount").value = data.totalAmount || 0;
+document.getElementById("customerName").value = data.customerName || "";
+document.getElementById("vehicleId").value = data.vehicleId || 0;  // Add this line for vehicle ID
+document.getElementById("km").value = data.km || 0;
+document.getElementById("baseFare").value = data.baseFare || 0;
+document.getElementById("kmAmount").value = data.kmAmount || 0;
+document.getElementById("tax").value = data.tax || 0;
+document.getElementById("discount").value = data.discount || 0;
+document.getElementById("driverFees").value = data.driverFees || 0;
+document.getElementById("totalAmount").value = data.totalAmount || 0;
+
         })
         .catch(error => {
             console.error("Error fetching latest booking:", error); // Log error in console
@@ -407,71 +409,62 @@ function fetchLatestBooking() {
         });
 }
 
-      async function processPayment() {
+     
+    function processPayment() {
     try {
-        // Get input elements safely
-        let orderNumField = document.getElementById("orderNum");
-        let customerNameField = document.getElementById("customerName");
-        let vehicleIdField = document.getElementById("vehicleId");
-        let kmField = document.getElementById("km");
-        let baseFareField = document.getElementById("baseFare");
-        let kmAmountField = document.getElementById("kmAmount");
-        let taxField = document.getElementById("tax");
-        let discountField = document.getElementById("discount");
-        let driverFeesField = document.getElementById("driverFees");
-        let totalAmountField = document.getElementById("totalAmount");
+        // Retrieve field values
+        let orderNum = $("#orderNum").val(); // String (no need for parsing)
+        let customerName = $("#customerName").val(); // String (no need for parsing)
+        let vehicleId = parseInt($("#vehicleId").val(), 10) || 0; // Integer (fallback to 0 if invalid)
+        let km = parseInt($("#km").val(), 10) || 0; // Integer (fallback to 0 if invalid)
+        let baseFare = parseInt($("#baseFare").val(), 10) || 0; // Integer (fallback to 0 if invalid)
+        let kmAmount = parseFloat($("#kmAmount").val()) || 0.0; // Double (fallback to 0 if invalid)
+        let tax = parseFloat($("#tax").val()) || 0.0; // Double (fallback to 0 if invalid)
+        let discount = parseFloat($("#discount").val()) || 0.0; // Double (fallback to 0 if invalid)
+        let driverFees = parseFloat($("#driverFees").val()) || 0.0; // Double (fallback to 0 if invalid)
+        let totalAmount = parseFloat($("#totalAmount").val()) || 0.0; // Double (fallback to 0 if invalid)
 
-        // Ensure fields exist before accessing values
-        if (!orderNumField || !customerNameField || !vehicleIdField || !kmField || !baseFareField ||
-            !kmAmountField || !taxField || !discountField || !driverFeesField || !totalAmountField) {
-            alert("Error: Some required fields are missing.");
+        // Validate required fields
+        if (!orderNum || !customerName || !vehicleId || km <= 0 || baseFare <= 0) {
+            alert("Error: Required fields are missing or invalid.");
             return;
         }
 
-        // Construct data object
+        // Construct the data object
         let data = {
-            orderNum: orderNumField.value,
-            customerName: customerNameField.value,
-            vehicleId: parseInt(vehicleIdField.value) || 0,
-            km: parseFloat(kmField.value) || 0,
-            baseFare: parseFloat(baseFareField.value) || 0,
-            kmAmount: parseFloat(kmAmountField.value) || 0,
-            tax: parseFloat(taxField.value) || 0,
-            discount: parseFloat(discountField.value) || 0,
-            driverFees: parseFloat(driverFeesField.value) || 0,
-            totalAmount: parseFloat(totalAmountField.value) || 0
+            orderNum: orderNum,
+            customerName: customerName,
+            vehicleId: vehicleId,
+            km: km,
+            baseFare: baseFare,
+            kmAmount: kmAmount,
+            tax: tax,
+            discount: discount,
+            driverFees: driverFees,
+            totalAmount: totalAmount
         };
 
-        console.log("Sending Data:", data); // Debugging log
+        console.log("Sending Data:", data);  // Debugging log
 
-        // Perform fetch request using async/await
-        let response = await fetch("http://localhost:8080/Cab_services/resources/billing/processPayment", {
-            method: "POST",
-            headers: { 
-                "Content-Type": "application/json",
-                "Accept": "application/json"  // Ensure response format is JSON
+        // Send the AJAX request
+        $.ajax({
+            url: "http://localhost:8080/Cab_services/resources/billing/processPayment",
+            type: "POST",
+            contentType: "application/json",
+            dataType: "json",
+            data: JSON.stringify(data),
+            success: function(response) {
+                alert(response.message || "Payment successful!");
+                window.location.reload();  // Reload page after success
             },
-            body: JSON.stringify(data)
+            error: function(xhr, status, error) {
+                console.log("Error:", xhr.responseText);
+                alert("Payment processing failed: " + xhr.responseText);
+            }
         });
-
-        // Check if the response is okay
-        if (!response.ok) {
-            let errorResult = await response.json();
-            throw new Error(errorResult.error || "Server error");
-        }
-
-        // Process JSON response
-        let result = await response.json();
-        alert(result.message || result.error);
-
-        // Reload if payment is successful
-        if (result.message) {
-            window.location.reload();
-        }
-        
     } catch (error) {
-        console.error("Fetch Error:", error);
-        alert("Payment processing failed: " + error.message);
+        console.error("AJAX Error:", error);
+        alert("Error in processing payment: " + error.message);
     }
 }
 
