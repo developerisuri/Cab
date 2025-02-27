@@ -263,7 +263,7 @@ button.processing::after {
                 "name": name,
                 "address": address,
                 "nic": nic,
-                "telephone": telephone
+                "tele": telephone
             };
 
             // Send the AJAX request to the backend to add a new customer
