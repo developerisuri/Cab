@@ -45,7 +45,7 @@
 
     <!-- Logout Button on the Right -->
     <div class="logout-btn">
-        <a href="logout.jsp" class="btn btn-logout">Logout</a>
+        <a href="logout.jsp" class="btn btn-logout" button onclick="logout()">Logout</a>
     </div>
 
 
@@ -663,4 +663,29 @@ p {
         nav.classList.toggle('active');
     }
 </script>
+
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/js/all.min.js"></script> 
+<script>
+    
+    document.addEventListener("DOMContentLoaded", function () {
+    // Logout function
+    window.logout = function () {
+        // Call RESTful logout endpoint
+        fetch("http://localhost:8080/Cab_services/resources/auth/logout")
+            .then(response => response.json())
+            .then(data => {
+                // Clear the client-side session (localStorage)
+                localStorage.removeItem("authUser");
+                window.location.href = "loginCustomer.jsp";  // Redirect to login page
+            })
+            .catch(error => console.error("Logout Error:", error));
+    };
+});
+
+    
+    
+    
+    </script>
 </html>

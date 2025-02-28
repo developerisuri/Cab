@@ -46,7 +46,7 @@
 
     <!-- Logout Button on the Right -->
     <div class="logout-btn">
-        <a href="logout.jsp" class="btn btn-logout">Logout</a>
+        <a href="logout.jsp" class="btn btn-logout" button onclick="logout()">Logout</a>
     </div>
 
     </head>
@@ -1021,5 +1021,28 @@ $(document).ready(function () {
 });
 
 </script>
+
+
+<script>
+    
+    document.addEventListener("DOMContentLoaded", function () {
+    // Logout function
+    window.logout = function () {
+        // Call RESTful logout endpoint
+        fetch("http://localhost:8080/Cab_services/resources/auth/logout")
+            .then(response => response.json())
+            .then(data => {
+                // Clear the client-side session (localStorage)
+                localStorage.removeItem("authUser");
+                window.location.href = "loginCustomer.jsp";  // Redirect to login page
+            })
+            .catch(error => console.error("Logout Error:", error));
+    };
+});
+
+    
+    
+    
+    </script>
 
 </html>
