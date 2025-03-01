@@ -82,7 +82,7 @@
                     <div class="card-body">
                         <h5 class="card-title">Manage Registered Customers</h5>
                         <p class="card-description">View and manage the registered Customers</p>
-                        <a href="<%= request.getContextPath() %>/user-management.jsp" class="btn btn-custom">Go to Page</a>
+                        <a href="<%= request.getContextPath() %>/Acustomer.jsp" class="btn btn-custom">Go to Page</a>
                     </div>
                 </div>
             </div>
@@ -93,7 +93,7 @@
                     <div class="card-body">
                         <h5 class="card-title">Manage Orders</h5>
                         <p class="card-description">View and manage the customers orders</p>
-                        <a href="<%= request.getContextPath() %>/orders-overview.jsp" class="btn btn-custom">Go to Page</a>
+                        <a href="<%= request.getContextPath() %>/Abooking.jsp" class="btn btn-custom">Go to Page</a>
                     </div>
                 </div>
             </div>
