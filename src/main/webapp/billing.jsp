@@ -413,16 +413,16 @@ document.getElementById("totalAmount").value = data.totalAmount || 0;
     function processPayment() {
     try {
         // Retrieve field values
-        let orderNum = $("#orderNum").val(); // String (no need for parsing)
-        let customerName = $("#customerName").val(); // String (no need for parsing)
-        let vehicleId = parseInt($("#vehicleId").val(), 10) || 0; // Integer (fallback to 0 if invalid)
+        let orderNum = $("#border_num").val(); // String (no need for parsing)
+        let customerName = $("#bcuname").val(); // String (no need for parsing)
+        let vehicleId = parseInt($("#vehicle_id").val(), 10) || 0; // Integer (fallback to 0 if invalid)
         let km = parseInt($("#km").val(), 10) || 0; // Integer (fallback to 0 if invalid)
-        let baseFare = parseInt($("#baseFare").val(), 10) || 0; // Integer (fallback to 0 if invalid)
-        let kmAmount = parseFloat($("#kmAmount").val()) || 0.0; // Double (fallback to 0 if invalid)
+        let baseFare = parseInt($("#bbase_fare").val(), 10) || 0; // Integer (fallback to 0 if invalid)
+        let kmAmount = parseFloat($("#km_amount").val()) || 0.0; // Double (fallback to 0 if invalid)
         let tax = parseFloat($("#tax").val()) || 0.0; // Double (fallback to 0 if invalid)
         let discount = parseFloat($("#discount").val()) || 0.0; // Double (fallback to 0 if invalid)
-        let driverFees = parseFloat($("#driverFees").val()) || 0.0; // Double (fallback to 0 if invalid)
-        let totalAmount = parseFloat($("#totalAmount").val()) || 0.0; // Double (fallback to 0 if invalid)
+        let driverFees = parseFloat($("#driver_fees").val()) || 0.0; // Double (fallback to 0 if invalid)
+        let totalAmount = parseFloat($("#total_amount").val()) || 0.0; // Double (fallback to 0 if invalid)
 
         // Validate required fields
         if (!orderNum || !customerName || !vehicleId || km <= 0 || baseFare <= 0) {
@@ -432,16 +432,16 @@ document.getElementById("totalAmount").value = data.totalAmount || 0;
 
         // Construct the data object
         let data = {
-            orderNum: orderNum,
-            customerName: customerName,
-            vehicleId: vehicleId,
+            border_num: orderNum,
+            bcuname: customerName,
+           vehicle_id: vehicleId,
             km: km,
-            baseFare: baseFare,
-            kmAmount: kmAmount,
+           bbase_fare: baseFare,
+           km_amount: kmAmount,
             tax: tax,
             discount: discount,
-            driverFees: driverFees,
-            totalAmount: totalAmount
+            driver_fees: driverFees,
+            total_amount: totalAmount
         };
 
         console.log("Sending Data:", data);  // Debugging log
