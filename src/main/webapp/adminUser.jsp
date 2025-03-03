@@ -445,6 +445,7 @@ $(document).ready(function () {
             $.ajax({
                 url:`http://localhost:8080/Cab_services/resources/adminUser`,
                 type: "DELETE",
+                 dataType: 'json', 
                 success: function (response) {
                     alert("User deleted successfully!");
                     $("#deleteUserModal").modal("hide");

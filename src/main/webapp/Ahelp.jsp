@@ -332,27 +332,29 @@ $(document).ready(function () {
         }
 
         let helpData = {
-            help_id: parseInt(helpId),  // Ensure help_id is a number
+            helpId: parseInt(helpId),  // Ensure help_id is a number
             instructions: instructions
         };
 
         console.log("Sending JSON:", JSON.stringify(helpData));  // Debugging
 
-        $.ajax({
-            url: 'http://localhost:8080/Cab_services/resources/ahelp/update',  // Replace with your actual update endpoint URL
-            type: 'PUT',
-            contentType: 'application/json',
-            data: JSON.stringify(helpData),
-            success: function (response) {
-                alert("Help instruction updated successfully!");
-                $("#editHelpModal").modal("hide");
-                loadHelpInstructions(); // Refresh the table
-            },
-            error: function (xhr, status, error) {
-                console.error("Update failed:", xhr.responseText);
-                alert("Error updating help instruction: " + xhr.responseText);
-            }
-        });
+       $.ajax({
+    url: 'http://localhost:8080/Cab_services/resources/ahelp/update',
+    type: 'PUT',
+    contentType: 'application/json',
+    dataType: 'json',  // Expect JSON response
+    data: JSON.stringify(helpData),
+    success: function (response) {
+        alert("Help instruction updated successfully!");
+        $("#editHelpModal").modal("hide");
+        loadHelpInstructions();
+    },
+    error: function (xhr, status, error) {
+        console.error("Update failed:", xhr.responseText);
+        alert("Error updating help instruction: " + xhr.responseText);
+    }
+});
+
     }
 
     // Handle form submission for updating the help instruction
