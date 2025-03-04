@@ -32,11 +32,11 @@
     </div>
 </nav>   
         <!-- Help Button on the Left with an Image -->
-<div class="help-btn">
+<!--div class="help-btn">
     <a href="help.jsp" class="btn btn-help" alt="Help Icon">
         
     </a>
-</div>
+</div-->
 
     <!-- Logout Button on the Right -->
     <div class="logout-btn">
@@ -111,6 +111,9 @@ body {
     font-family: Arial, sans-serif;
     background-color: #f7f7f7;
     color: #333;
+     font-weight: bold;
+      font-size: 19px;
+     
     
     /* Background image setup */
     background: url('v2.png') no-repeat center center;
@@ -395,6 +398,7 @@ h1 {
     border: 2px solid #000;
     padding: 12px;
     text-align: center;
+     font-weight: bold;
 }
 
 .help-table th {
@@ -406,6 +410,7 @@ h1 {
     padding: 12px;
     text-align: center ;
     border: 10px solid #ddd;
+     font-weight: bold;
    
 }
 
