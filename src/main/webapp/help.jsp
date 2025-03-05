@@ -112,7 +112,7 @@ body {
     background-color: #f7f7f7;
     color: #333;
      font-weight: bold;
-      font-size: 19px;
+      font-size: 17px;
      
     
     /* Background image setup */
