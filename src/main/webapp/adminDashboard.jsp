@@ -19,18 +19,22 @@
         body {
             font-family: 'Arial', sans-serif;
             text-align:center;
+            background-color: lightgoldenrodyellow;
         }
         .dashboard-card {
             box-shadow: 0 4px 8px rgba(0,0,0,0.1);
             border-radius: 8px;
             overflow: hidden;
             transition: transform 0.3s;
+            margin-top: 60px;
+            background-color: lightcyan;
         }
         .dashboard-card:hover {
             transform: scale(1.05);
         }
         .card-body {
             text-align: center;
+            margin-top: 16px;
         }
         .card-title {
             font-size: 24px;
@@ -47,7 +51,7 @@
             color: white;
         }
         .btn-custom:hover {
-            background-color: #0056b3;
+            background-color: red;
             border-color: #0056b3;
         }
         .container-fluid {
